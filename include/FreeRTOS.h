@@ -123,6 +123,8 @@
 
 #endif /* if ( configUSE_PICOLIBC_TLS == 1 ) */
 
+#include "remote_config.h"
+
 /* *INDENT-OFF* */
 #ifdef __cplusplus
     extern "C" {

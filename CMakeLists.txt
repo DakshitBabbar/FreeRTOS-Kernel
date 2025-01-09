@@ -246,6 +246,7 @@ target_sources(freertos_kernel PRIVATE
     stream_buffer.c
     tasks.c
     timers.c
+    remote_config.c
 )
 
 if (DEFINED FREERTOS_HEAP )
