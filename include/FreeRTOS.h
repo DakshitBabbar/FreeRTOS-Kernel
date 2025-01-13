@@ -94,6 +94,13 @@
     #define configUSE_MALLOC_FAILED_HOOK    0
 #endif
 
+#ifndef configASSERT
+    #define configASSERT( x )
+    #define configASSERT_DEFINED    0
+#else
+    #define configASSERT_DEFINED    1
+#endif
+
 /* Basic FreeRTOS definitions. */
 #include "projdefs.h"
 
@@ -366,13 +373,6 @@
     #error configMAX_TASK_NAME_LEN must be set to a minimum of 1 in FreeRTOSConfig.h
 #endif
 
-#ifndef configASSERT
-    #define configASSERT( x )
-    #define configASSERT_DEFINED    0
-#else
-    #define configASSERT_DEFINED    1
-#endif
-
 /* configPRECONDITION should be defined as configASSERT.
  * The CBMC proofs need a way to track assumptions and assertions.
  * A configPRECONDITION statement should express an implicit invariant or
@@ -447,7 +447,7 @@
 #ifndef portRELEASE_TASK_LOCK
 
     #if ( configNUMBER_OF_CORES == 1 )
-        #define portRELEASE_TASK_LOCK()
+        #define portRELEASE_TASK_LOCK( xCoreID )
     #else
         #error portRELEASE_TASK_LOCK is required in SMP
     #endif
@@ -457,7 +457,7 @@
 #ifndef portGET_TASK_LOCK
 
     #if ( configNUMBER_OF_CORES == 1 )
-        #define portGET_TASK_LOCK()
+        #define portGET_TASK_LOCK( xCoreID )
     #else
         #error portGET_TASK_LOCK is required in SMP
     #endif
@@ -467,7 +467,7 @@
 #ifndef portRELEASE_ISR_LOCK
 
     #if ( configNUMBER_OF_CORES == 1 )
-        #define portRELEASE_ISR_LOCK()
+        #define portRELEASE_ISR_LOCK( xCoreID )
     #else
         #error portRELEASE_ISR_LOCK is required in SMP
     #endif
@@ -477,7 +477,7 @@
 #ifndef portGET_ISR_LOCK
 
     #if ( configNUMBER_OF_CORES == 1 )
-        #define portGET_ISR_LOCK()
+        #define portGET_ISR_LOCK( xCoreID )
     #else
         #error portGET_ISR_LOCK is required in SMP
     #endif
@@ -3032,6 +3032,16 @@
  * infinite loop in idle task function when performing unit tests. */
 #ifndef configCONTROL_INFINITE_LOOP
     #define configCONTROL_INFINITE_LOOP()
+#endif
+
+/* Set configENABLE_PAC and/or configENABLE_BTI to 1 to enable PAC and/or BTI
+ * support and 0 to disable them. These are currently used in ARMv8.1-M ports. */
+#ifndef configENABLE_PAC
+    #define configENABLE_PAC    0
+#endif
+
+#ifndef configENABLE_BTI
+    #define configENABLE_BTI    0
 #endif
 
 /* Sometimes the FreeRTOSConfig.h settings only allow a task to be created using
